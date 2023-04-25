@@ -1,14 +1,11 @@
 import React from "react";
-import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
-import CheckroomOutlinedIcon from '@mui/icons-material/CheckroomOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
-import ContactlessOutlinedIcon from '@mui/icons-material/ContactlessOutlined';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import styled from "@emotion/styled";
-import { shades } from "../../theme";
 import { setIsMenuOpen }  from "../../store/menuslice"
 import { useNavigate } from "react-router-dom";
 import {logout} from "../../store/authSlice"
@@ -27,15 +24,31 @@ const Menu =()=>{
 
   const logoutAndRedirectHome = () => {
     dispatch(logout());
+    dispatch(setIsMenuOpen())
     windows.alert("You have Logged out")
     navigate('/');
   };
 
   const handlesingup =()=>{
     dispatch(logout());
+    dispatch(setIsMenuOpen())
     navigate('/signup');
   }
 
+  const handlelogin=()=>{
+    dispatch(setIsMenuOpen())
+    navigate('/login');
+  }
+
+  const handlesizechart=()=>{
+    dispatch(setIsMenuOpen())
+    navigate("/sizechart")
+  }
+ 
+  const handleshare=()=>{
+    dispatch(setIsMenuOpen())
+    navigate("/share")
+  }
 return (
     <Box 
      display={ isMenuOpen ? "block" : "none"}
@@ -71,7 +84,7 @@ return (
             <Typography variant="h4">Logout</Typography>
             </IconButton>
           </FlexBox>) : (
-            <FlexBox  p="15px 0" onClick={() => {navigate("/login")}}>
+            <FlexBox  p="15px 0" onClick={handlelogin}>
             <IconButton>
               <PeopleOutlinedIcon size={30}/>
               <Typography variant="h4">Login</Typography>
@@ -87,14 +100,14 @@ return (
               </IconButton>
             </FlexBox>
 
-          <FlexBox  p="15px 0" onClick={() => {navigate("/sizechart")}} >
+          <FlexBox  p="15px 0" onClick={handlesizechart} >
           <IconButton>
             <StraightenIcon size={30}/>
             <Typography variant="h4">SizeChart</Typography>
             </IconButton>
             </FlexBox>
 
-            <FlexBox  p="15px 0" onClick={() => {navigate("/share")}}>
+            <FlexBox  p="15px 0" onClick={handleshare}>
                 <IconButton>
               <TwitterIcon size={30} />
             </IconButton>
