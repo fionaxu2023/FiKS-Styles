@@ -1,9 +1,11 @@
-import React from 'react';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import React , {useState} from 'react';
+import { Box, TextField, InputAdornment, IconButton, Typography, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { authenticate } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
 import { shades } from '../../theme';
+
 /**
   The AuthForm component can be used for Login or Sign Up.
   Props for Login: name="login", displayName="Login"
@@ -11,6 +13,7 @@ import { shades } from '../../theme';
 **/
 
 const AuthForm = ({ name, displayName }) => {
+  const [showPassword, setShowPassword] = useState(false);
   const { error } = useSelector((state) => state.auth);
   const isLoggedIn = useSelector((state) => state.auth.me);
   const dispatch = useDispatch();
@@ -31,18 +34,32 @@ const AuthForm = ({ name, displayName }) => {
     navigate("/")
   };
 
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <Box component="form" onSubmit={handleSubmit} name={name} sx={{ p: 2, border: '1px solid gray', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <Typography variant="h5" sx={{ textAlign: 'center' }}>{displayName}</Typography>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
+      <Box component="form" onSubmit={handleSubmit} name={name} backgroundColor="white"
+        color="black" sx={{ p: 2, border: '1px solid gray', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <Typography variant="h4" sx={{ textAlign: 'center' }}>{displayName}</Typography>
         <TextField name="username" label="Username" variant="outlined" />
-        <TextField name="password" label="Password" type="password" variant="outlined" />
+        <TextField name="password" label="Password" type={showPassword ? 'text' : 'password'} variant="outlined"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleShowPassword}>
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
         <Button type="submit" variant="contained" sx={{ backgroundColor: shades.primary[300], color: "white", }}>{displayName}</Button>
         {error && <Typography variant="subtitle1" sx={{ color: 'red' }}>{error}</Typography>}
       </Box>
     </Box>
-  );
-};
+  )
+  }
 
+  export default AuthForm
 
-export default AuthForm;
