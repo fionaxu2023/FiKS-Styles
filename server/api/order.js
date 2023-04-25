@@ -31,4 +31,7 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
+//{"orders":
+//[{"id":1,"products":
+//[{"productId":78,"quantity":2}],"userName":" ","sessionId":null,"createdAt":"2023-04-25T19:18:09.321Z","updatedAt":"2023-04-25T19:18:09.321Z","userId":2}]}
 module.exports = router;

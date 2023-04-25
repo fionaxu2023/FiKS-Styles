@@ -111,7 +111,7 @@ router.post("/:userId/add", async (req, res, next) => {
 router.put("/:userId/update", async (req, res, next) => {
   try {
     const userId = req.params.userId;
-    const productId = req.body.movieId;
+    const productId = req.body.productId;
     const newQuantity = req.body.quantity;
     const userCart = await Cart.findOne({ where: { userId } });
 
