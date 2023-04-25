@@ -6,7 +6,7 @@ import ProductDetail from './components/homepage/productDetail';
 import Checkout from './components/checkout/Checkout';
 import Confirmation from './components/checkout/Confirmation';
 import AuthForm from "./components/auth/AuthForm"
-import User from "./components/auth/user"
+import User from "./components/auth/User"
 import SizeChart from './components/SizeChart';
 import AboutContact from "./components/AboutContact"
 import AdminDetail from "./components/auth/admin/AdminDetail"
