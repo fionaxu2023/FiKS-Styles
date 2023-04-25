@@ -6,7 +6,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import AdminProduct from './AdminSingleProduct';
-import Userinfo from './userinfo';
+import Userinfo from './Userinfo';
 const AdminProducts = () => {
 
     const products = useSelector((state)=> state.products.allProducts);
