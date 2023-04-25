@@ -13,7 +13,7 @@ const Products = () => {
   const [value, setValue] = useState("all");
   const [page, setPage] = useState(1);
   const cartitems = useSelector((state) => state.cart.items);
-  const productsPerPage = 9;
+  const productsPerPage = 12;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

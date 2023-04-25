@@ -1,31 +1,5 @@
 const router = require('express').Router()
-const { Order } = require('../db/index')
-
-// router.delete('/:productId', async (req, res, next) => {
-//   try {
-//     const itemToRemove = await Order.findAll({
-//       where: {
-//         items: req.params.productId
-//       }
-//     })
-//     const removeItem = await itemToRemove.destroy()
-//     res.json(`${removeItem} has been removed from your order.`)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
-// router.put('/', async (req, res, next) => {
-//   try {
-//     const updatedItem = await Order.update({
-//       status: 'ACTIVE',
-//       items: req.body
-//     })
-//     res.json(updatedItem)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
+const { Order , User} = require('../db/index')
 
 router.post('/', async (req, res, next) => {
   try {
@@ -37,13 +11,24 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.get('/', async (req, res, next) => {
-  try {
-    const order = await Order.findAll();
-    res.json(order)
-  } catch (err) {
-    next(err)
-  }
-})
+//history order
 
-module.exports = router
+router.get('/:userId', async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const orders = await Order.findAll({
+      where: { userId: user.id }
+    });
+
+    return res.status(200).json({ orders });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
+
+module.exports = router;

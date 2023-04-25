@@ -15,23 +15,21 @@ import { shades } from '../../theme';
 const AuthForm = ({ name, displayName }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { error } = useSelector((state) => state.auth);
-  const isLoggedIn = useSelector((state) => state.auth.me);
+  // const isLoggedIn = useSelector((state) => !!state.auth.me.id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = async(evt) => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
     const formName = evt.target.name;
     const username = evt.target.username.value;
     const password = evt.target.password.value;
-    await dispatch(authenticate({ username, password, method: formName }));
-    {
-      isLoggedIn? (alert(`${formName} Successfully`)
-      ):(
-        (alert(`${formName} Failed, Please Try Again`))
-      )
-    }
-    navigate("/")
+     dispatch(authenticate({ username, password, method: formName }));
+    // {
+    //   isLoggedIn
+    //     ? (window.alert(`${formName} Successfully!`), navigate("/"))
+    //     : (console.log("failed"))
+    // }
   };
 
   const handleShowPassword = () => {
@@ -55,6 +53,7 @@ const AuthForm = ({ name, displayName }) => {
           }}
         />
         <Button type="submit" variant="contained" sx={{ backgroundColor: shades.primary[300], color: "white", }}>{displayName}</Button>
+        <Button type="submit" variant="contained" onClick={()=>navigate("/")} sx={{ backgroundColor: shades.primary[300], color: "white", }}>Home</Button>
         {error && <Typography variant="subtitle1" sx={{ color: 'red' }}>{error}</Typography>}
       </Box>
     </Box>

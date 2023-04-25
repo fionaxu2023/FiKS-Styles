@@ -8,22 +8,19 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
-
+import { shades } from '../../theme';
 const UKSizeChart = () => {
   return (
     <Box width="80%" margin="80px auto">
-      <Typography variant="h4" textAlign="center" gutterBottom>
-        UK Size Chart
-      </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center"><b>UK Size</b></TableCell>
-              <TableCell align="center">Bust (in)</TableCell>
-              <TableCell align="center">Waist (in)</TableCell>
-              <TableCell align="center">Hips (in)</TableCell>
-            </TableRow>
+          <TableHead sx={{ backgroundColor: shades.primary[300], color: "white"}}>
+          <TableRow>
+  <TableCell align="center" style={{ color: 'white' }}><b>UK Size</b></TableCell>
+  <TableCell align="center" style={{ color: 'white' }}>Bust (in)</TableCell>
+  <TableCell align="center" style={{ color: 'white' }}>Waist (in)</TableCell>
+  <TableCell align="center" style={{ color: 'white' }}>Hips (in)</TableCell>
+</TableRow>
           </TableHead>
           <TableBody>
             <TableRow>

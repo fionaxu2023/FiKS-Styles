@@ -15,16 +15,19 @@ const Product=(props)=>{
     const [quantity, setQuantity] = useState(1);
     const [isHovered, setIsHovered] = useState(false);
     const userId= useSelector(state=>state.auth.me.id)
+    
     const isLoggedIn = useSelector((state) => !!state.auth.me.id);
 
     const handleAddToCart = async (product,quantity) => {
       if (userId) {
-         dispatch(addItemToCart({ userId, productId: product.id, quantity }));
-      } else {
-        console.log(product);
-        addToLocalStorageCart(product,quantity);
-      }
+         await dispatch(addItemToCart({ userId, productId: product.id, quantity }));
+         dispatch(fetchCartItems(userId))
+      // } else {
+      //   console.log(product);
+      //   addToLocalStorageCart(product,quantity);
+      // }
     };
+  }
   
   const {
     palette: { neutral },

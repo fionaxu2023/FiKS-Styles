@@ -10,6 +10,8 @@ import {decreaseCount,increaseCount,removeFromCart,setIsCartOpen } from "../../s
 import { useNavigate } from "react-router-dom";
 import {fetchCartItems, addItemToCart , updateCartItemQuantity, removeItemFromCart} from "../../store/cartSlice"
 import { v4 as uuidv4 } from "uuid"
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import {getLocalStorageCart,updateLocalStorageCartItemQuantity,removeLocalStorageCartItem,} from "../../store/localCart";
 
 const FlexBox = styled(Box)`
@@ -24,19 +26,24 @@ const Cart =()=>{
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart)
+  console.log(cart)
   const isLoggedIn = useSelector((state) => !!state.auth.me.id);
   const [cartItems, setCartItems] = useState([]);
   const [newQuantity, setnewQuantity] = useState("");
  
-  const totalQuantity = cart.reduce((total, item) => {
-    return total + item.quantity;
-  }, 0)
+  
   const userId = useSelector((state) => state.auth.me.id);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
-  const totalPrice =  cart.reduce(
-    (acc, item) => acc + (item.length ? item.quantity * item.product.price : 0),
-    0
-  );
+
+  const totalQuantity = cart.length > 0 ? cart.reduce((total, item) => {
+    return total + item.quantity;
+  }, 0) : 0;
+  
+  const totalPrice = cart.length > 0 ? cart.reduce((acc, item) => {
+    return acc + (item.product && item.product.price ? item.quantity * item.product.price : 0);
+  }, 0) : 0;
+  
+console.log(totalPrice)
 
   useEffect(() => {
     if (userId) {
@@ -53,12 +60,22 @@ const Cart =()=>{
     }
   };
 
-  const handleQuantityChange = async(productId, newQuantity) => {
-    if (!newQuantity) {
-      return;
-    }
+
+  const handleQuantityChangeDecrease = async(productId, newQuantity) => {
     if (userId) {
-        await dispatch(updateCartItemQuantity({ userId, productId, newQuantity }))
+        await dispatch(updateCartItemQuantity({ userId, productId, quantity: newQuantity }))
+        dispatch(fetchCartItems(userId));
+    } 
+    else if (newQuantity<1){
+      await dispatch(removeItemFromCart({ userId, productId }))
+        dispatch(fetchCartItems(userId));
+    }
+  };
+
+  const handleQuantityChangeIncrease = async(productId, newQuantity) => {
+    console.log(newQuantity)
+    if (userId) {
+        await dispatch(updateCartItemQuantity({ userId, productId, quantity: newQuantity }))
         dispatch(fetchCartItems(userId));
     } 
   };
@@ -95,67 +112,78 @@ const Cart =()=>{
           </FlexBox>
 
 
-          <Box >
-            {cart.length===0? (<Typography fontWeight="bold">
-            Your cart is empty</Typography>): (
-              <Box>
-            {cart.map((item) => {
-              const product= userId && item.product ? item.product : item;
-            return(
-              <Box key={uuidv4()}>
-                <FlexBox p="15px 0">
-                  <Box flex="1 1 40%">
-                    <img
-                      alt={product.name}
-                      width="123px"
-                      height="164px"
-                      src={product.imageURL}
-                    />
-                  </Box>
-                  <Box flex="1 1 60%">
-                    <FlexBox mb="5px">
-                      <Typography fontWeight="bold">
-                        {product.name}
-                      </Typography>
-                      <IconButton
-                        onClick={()=>handleDeleteItem(product.id)}
-                      >
-                        <CloseIcon />
-                       </IconButton>
-                    </FlexBox>
-                    <Typography>{product.shortDescription}</Typography>
-                    <FlexBox m="15px 0">
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        border={`1.5px solid ${shades.neutral[700]}`}
-                      >
-                        {/* <TextField label={item.quantity} variant="standard" value = {newQuantity} size="small" onChange={(event) => setnewQuantity(event.target.value)} />
-                        <IconButton onClick= {()=>handleQuantityChange(product.id, newQuantity)}>
-                        <AddCircleOutlineIcon fontSize="small" />
-                        </IconButton> */}
-                        <input
-                          type="number"
-                          value={item.quantity}
-                          min="1"
-                          onChange={(e) =>
-                            handleQuantityChange(
-                              product.id,
-                              parseInt(e.target.value)
-                            )
-                          }
-                        />
-                      </Box>
-                      <Typography fontWeight="bold">
-                        ${product.price}
-                      </Typography>
-                    </FlexBox>
-                  </Box>
-                </FlexBox>
-                <Divider />
+          <Box>
+       {cart.length === 0 ? (
+       <Typography fontWeight="bold">Your cart is empty</Typography>
+      ) : (
+    <Box>
+      {cart.map((item) => {
+        const product =
+          userId && item.product ? item.product : item;
+        return (
+          <Box key={uuidv4()}>
+            <FlexBox p="15px 0">
+              <Box flex="1 1 40%">
+                <img
+                  alt={product.name}
+                  width="123px"
+                  height="164px"
+                  src={product.imageURL}
+                />
               </Box>
-            )})} </Box>)}
+              <Box flex="1 1 60%">
+                <FlexBox mb="5px">
+                  <Typography fontWeight="bold">
+                    {product.name}
+                  </Typography>
+                  <IconButton onClick={() => handleDeleteItem(product.id)}>
+                    <CloseIcon />
+                  </IconButton>
+                </FlexBox>
+                <Typography>{product.shortDescription}</Typography>
+                <FlexBox m="15px 0">
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    border={`1.5px solid ${shades.neutral[700]}`}
+                  >
+                    <IconButton
+                    disabled={!product.id}
+                    onClick={() =>
+                      handleQuantityChangeDecrease(
+                        product.id,
+                        parseInt(item.quantity - 1)
+                      )
+                    }
+                  >
+                    <RemoveIcon />
+                  </IconButton>
+                  <Typography>{item.quantity}</Typography>
+                  <IconButton
+                    disabled={!product.id}
+                    onClick={() =>
+                      handleQuantityChangeIncrease(
+                        product.id,
+                        parseInt(item.quantity + 1)
+                      )
+                    }
+                  >
+                    <AddIcon />
+                    </IconButton>
+                  </Box>
+                  <Typography fontWeight="bold">
+                    ${product.price}
+                  </Typography>
+                </FlexBox>
+              </Box>
+            </FlexBox>
+            <Divider />
           </Box>
+        );
+      })}
+    </Box>
+  )}
+</Box>
 
          
           <Box m="20px 0">
