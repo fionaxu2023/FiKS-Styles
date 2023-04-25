@@ -25,7 +25,7 @@ const Userinfo=()=>{
             margin="0 auto"
             display="grid"
             gridTemplateColumns="repeat(auto-fill, 300px)"
-            justifyContent="space-around"
+            justifyContent="center"
             rowGap="20px"
             columnGap="1.33%"
           >

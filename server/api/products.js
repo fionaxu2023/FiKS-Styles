@@ -41,5 +41,13 @@ router.put('/:productId', async(req,res,next)=>{
     }
   })
 
-
+  router.post('/', async(req,res,next)=>{
+    try{
+      const newpro = await Product.create(req.body)
+        res.send(newpro)
+    }
+    catch(error){
+      next(error)
+    }
+  })
 module.exports = router

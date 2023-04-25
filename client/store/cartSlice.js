@@ -21,10 +21,10 @@ export const addItemToCart = createAsyncThunk(
 
 export const updateCartItemQuantity = createAsyncThunk(
   "cart/updateItemQuantity",
-  async ({ userId, productId, newQuantity }) => {
+  async ({ userId, productId, quantity }) => {
     const { data } = await axios.put(`/api/cart/${userId}/update`, {
       productId,
-      newQuantity,
+      quantity,
     });
     return data;
   }
@@ -100,14 +100,15 @@ const initialState = {
         state.cart.push(action.payload);
       });
       builder.addCase(updateCartItemQuantity.fulfilled, (state, action) => {
-        // const index = state.cart.findIndex(
-        //   (item) => item.product.id === action.payload.productId
-        // );
-        // if (index !== -1) {
-        //   state[index].cart.quantity = action.payload.quantity;
-        // }
-        state.singleitem = action.payload;
+        const index = state.cart.findIndex(
+          (item) => item.product.id === action.payload.productId
+        );
+        if (index !== -1) {
+          state.cart[index].quantity = action.payload.quantity;
+        }
       });
+        // state.singleitem = action.payload;
+
       builder.addCase(removeItemFromCart.fulfilled, (state, action) => {
         // return state.cart.filter((item) => item.productId !== action.payload);
         state.singleitem = action.payload;
