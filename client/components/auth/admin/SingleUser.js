@@ -55,4 +55,4 @@ const SingleUser=(props)=>{
   );
 };
 
-export default SingleUser
+export default SingleUser;

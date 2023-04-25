@@ -14,14 +14,14 @@ class AboutContact extends React.Component {
           <h3>Contact Us</h3>
           <p>Email: steph.fiona@kim.gracehopper.com</p>
           <p>Phone: +1 (123) 456-7890</p>
-          <div className="social-media-icons">
+          {/* <div className="social-media-icons">
           <a href="https://twitter.com/heyqueenregina" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faTwitter} size="5x" />
           </a>
             <a href="https://instagram.com/heyqueenregina" target="_blank" rel="noopener noreferrer" style={{ marginLeft: '15px' }}>
               <FontAwesomeIcon icon={faInstagram} size="5x" />
             </a>
-          </div>
+          </div> */}
         </div>
       );
     }

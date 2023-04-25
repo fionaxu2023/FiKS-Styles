@@ -11,9 +11,7 @@ import SizeChart from './components/SizeChart';
 import AboutContact from "./components/AboutContact"
 import AdminDetail from "./components/auth/admin/AdminDetail"
 
-/**
- * COMPONENT
- */
+
 
 const AppRoutes = () => {
   const isLoggedIn = useSelector((state) => !!state.auth.me.id);

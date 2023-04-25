@@ -67,4 +67,4 @@ const AdminProduct=(props)=>{
   );
 };
 
-export default AdminProduct
+export default AdminProduct;
