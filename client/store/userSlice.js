@@ -50,9 +50,9 @@ export const getAllUser = createAsyncThunk('users/getAll', async () => {
 
   export const updateUser = createAsyncThunk(
     'users/updateUser',
-    async ({userId, firstName, lastName, username}) => {
+    async ({userId, firstName, lastName, username,password}) => {
       try {
-        const {data} = await axios.put(`/api/users/${userId}`,{firstName, lastName, username})
+        const {data} = await axios.put(`/api/users/${userId}`,{firstName, lastName, username,password})
         return data
       } catch(error){
         next (error)

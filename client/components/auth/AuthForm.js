@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { authenticate } from '../../store/store';
-
+import { useNavigate } from 'react-router-dom';
 /**
   The AuthForm component can be used for Login or Sign Up.
   Props for Login: name="login", displayName="Login"
@@ -10,14 +10,23 @@ import { authenticate } from '../../store/store';
 
 const AuthForm = ({ name, displayName }) => {
   const { error } = useSelector((state) => state.auth);
+  const isLoggedIn = useSelector((state) => state.auth.me);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async(evt) => {
     evt.preventDefault();
     const formName = evt.target.name;
     const username = evt.target.username.value;
     const password = evt.target.password.value;
-    dispatch(authenticate({ username, password, method: formName }));
+    await dispatch(authenticate({ username, password, method: formName }));
+    {
+      isLoggedIn? (alert(`${formName} Successfully`)
+      ):(
+        (alert(`${formName} Failed, Please Try Again`))
+      )
+    }
+    navigate("/")
   };
 
   return (

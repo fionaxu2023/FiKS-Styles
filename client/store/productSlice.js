@@ -48,7 +48,19 @@ export const getSingleProduct = createAsyncThunk(
       }
     }
   );
-
+  export const addProduct = createAsyncThunk(
+    'products/addProduct',
+    async ({ name, price, shortDescription, longDescription, category, imageURL }) => {
+      try {
+        const { data } = await axios.post("/api/products",{
+          name, price, shortDescription, longDescription, category, imageURL 
+        });
+        return data;
+      } catch (error) {
+        return error.message;
+      }
+    }
+  );
 
 const initialState = {
     allProducts: [],
@@ -77,6 +89,10 @@ export const productSlice = createSlice({
                 state.status="succeeded";
                 state.singleProduct = action.payload;
             })
+            .addCase(addProduct.fulfilled,(state,action)=>{
+              state.status="succeeded";
+              state.singleProduct = action.payload;
+          })
     },
 });
 

@@ -1,18 +1,6 @@
 const router = require('express').Router()
 const  {User} = require('../db/index')
 
-// function isAccess(req, res, next) {
-//   if (!req.user || req.user.securityClearance !== 'admin')
-//     return res.status(403).json('HEY GUY, WRONG PLACE')
-//   next()
-// }
-
-// function isUserAccess(req, res, next) {
-//   if (req.user.id.toString() !== req.params.id)
-//     return res.status(403).json('HEY GUY, WRONG PLACE')
-//   else next()
-// }
-
 router.get('/', async (req, res, next) => {
   try {
     const users = await User.findAll()

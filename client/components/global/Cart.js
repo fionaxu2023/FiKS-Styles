@@ -1,14 +1,16 @@
 import React,{ useEffect } from "react";
-import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
+import { useState } from "react";
+import { Box, Button, Divider, IconButton, Typography,TextField } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import styled from "@emotion/styled";
 import { shades } from "../../theme";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import {decreaseCount,increaseCount,removeFromCart,setIsCartOpen } from "../../store/cartSlice";
 import { useNavigate } from "react-router-dom";
-import { me } from '../../store/authSlice';
+import {fetchCartItems, addItemToCart , updateCartItemQuantity, removeItemFromCart} from "../../store/cartSlice"
+import { v4 as uuidv4 } from "uuid"
+import {getLocalStorageCart,updateLocalStorageCartItemQuantity,removeLocalStorageCartItem,} from "../../store/localCart";
 
 const FlexBox = styled(Box)`
   display: flex;
@@ -21,19 +23,47 @@ const Cart =()=>{
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart.cart);
-  const isCartOpen = useSelector((state) => state.cart.isCartOpen);
-  const totalPrice = cart.reduce((total, product) => {
-    return total + product.count * product.price;
-  }, 0).toFixed(2);
-
+  const cart = useSelector((state) => state.cart.cart)
   const isLoggedIn = useSelector((state) => !!state.auth.me.id);
+  const [cartItems, setCartItems] = useState([]);
+  const [newQuantity, setnewQuantity] = useState("");
+ 
+  const totalQuantity = cart.reduce((total, item) => {
+    return total + item.quantity;
+  }, 0)
+  const userId = useSelector((state) => state.auth.me.id);
+  const isCartOpen = useSelector((state) => state.cart.isCartOpen);
+  const totalPrice =  cart.reduce(
+    (acc, item) => acc + (item.length ? item.quantity * item.product.price : 0),
+    0
+  );
 
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchCartItems(userId));
+    }
+  }, [dispatch,userId ]);
+  
+  const handleDeleteItem = async(productId) => {
+    if (userId) {
+      await dispatch(removeItemFromCart({ userId, productId }));
+      dispatch(fetchCartItems(userId));
+    } else {
+      dispatch(removeFromCart({ productId }))
+    }
+  };
 
-  // useEffect(() => {
-  //   dispatch(me());
-  // }, []);
-
+  const handleQuantityChange = async(productId, newQuantity) => {
+    if (!newQuantity) {
+      return;
+    }
+    if (userId) {
+        await dispatch(updateCartItemQuantity({ userId, productId, newQuantity }))
+        dispatch(fetchCartItems(userId));
+    } 
+  };
+ 
+  
 
     return (
       <Box
@@ -58,7 +88,7 @@ const Cart =()=>{
       >
         <Box padding="30px" overflow="auto" height="100%">
           <FlexBox mb="15px">
-            <Typography variant="h3">SHOPPING BAG ({cart.length})</Typography>
+            <Typography variant="h3">SHOPPING BAG ({totalQuantity})</Typography>
             <IconButton onClick={() => dispatch(setIsCartOpen({}))}>
               <CloseIcon />
             </IconButton>
@@ -66,8 +96,13 @@ const Cart =()=>{
 
 
           <Box >
-            {cart.map((product) => (
-              <Box key={product.id}>
+            {cart.length===0? (<Typography fontWeight="bold">
+            Your cart is empty</Typography>): (
+              <Box>
+            {cart.map((item) => {
+              const product= userId && item.product ? item.product : item;
+            return(
+              <Box key={uuidv4()}>
                 <FlexBox p="15px 0">
                   <Box flex="1 1 40%">
                     <img
@@ -83,12 +118,10 @@ const Cart =()=>{
                         {product.name}
                       </Typography>
                       <IconButton
-                        onClick={() =>
-                          dispatch(removeFromCart({ id: product.id }))
-                        }
+                        onClick={()=>handleDeleteItem(product.id)}
                       >
                         <CloseIcon />
-                      </IconButton>
+                       </IconButton>
                     </FlexBox>
                     <Typography>{product.shortDescription}</Typography>
                     <FlexBox m="15px 0">
@@ -97,21 +130,21 @@ const Cart =()=>{
                         alignItems="center"
                         border={`1.5px solid ${shades.neutral[700]}`}
                       >
-                        <IconButton
-                          onClick={() =>
-                            dispatch(decreaseCount({ id: product.id }))
+                        {/* <TextField label={item.quantity} variant="standard" value = {newQuantity} size="small" onChange={(event) => setnewQuantity(event.target.value)} />
+                        <IconButton onClick= {()=>handleQuantityChange(product.id, newQuantity)}>
+                        <AddCircleOutlineIcon fontSize="small" />
+                        </IconButton> */}
+                        <input
+                          type="number"
+                          value={item.quantity}
+                          min="1"
+                          onChange={(e) =>
+                            handleQuantityChange(
+                              product.id,
+                              parseInt(e.target.value)
+                            )
                           }
-                        >
-                          <RemoveIcon />
-                        </IconButton>
-                        <Typography>{product.count}</Typography>
-                        <IconButton
-                          onClick={() =>
-                            dispatch(increaseCount({ id: product.id }))
-                          }
-                        >
-                          <AddIcon />
-                        </IconButton>
+                        />
                       </Box>
                       <Typography fontWeight="bold">
                         ${product.price}
@@ -121,7 +154,7 @@ const Cart =()=>{
                 </FlexBox>
                 <Divider />
               </Box>
-            ))}
+            )})} </Box>)}
           </Box>
 
          
@@ -146,9 +179,9 @@ const Cart =()=>{
                 dispatch(setIsCartOpen({}));
               }}
             >
-              CHECKOUT
-            </Button>
-             ) : (
+              Checkout
+            </Button>):(
+             
               
               <Button
               sx={{
@@ -161,11 +194,12 @@ const Cart =()=>{
               }}
               onClick={() => {
                 navigate("/login");
+                dispatch(setIsCartOpen({}));
               }}
             >
-               Please Login First
-            </Button>
-            )} 
+              Login & Checkout
+            </Button>)}
+             
             
           </Box>
         </Box>

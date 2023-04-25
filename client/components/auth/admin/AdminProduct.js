@@ -6,7 +6,8 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import AdminProduct from './AdminSingleProduct';
-import Userinfo from './userinfo';
+import Userinfo from './Userinfo';
+import AdminAdd from "./AdminAdd"
 const AdminProducts = () => {
 
     const products = useSelector((state)=> state.products.allProducts);
@@ -32,9 +33,10 @@ const AdminProducts = () => {
         (product) => product.category === "Dress"
       );
       return (
+        
         <Box width="80%" margin="80px auto">
           <Typography variant="h3" textAlign="center">
-            Our Featured <b>Products</b>
+            Administrator Dashboard
           </Typography>
           <Tabs
             textColor="primary"
@@ -54,6 +56,7 @@ const AdminProducts = () => {
             <Tab label="BOTTOM" value="BOTTOM" />
             <Tab label="DRESS" value="DRESS" />
             <Tab label="USER" value="USER"></Tab>
+            <Tab label="ADD" value="ADD"></Tab>
           </Tabs>
           <Box
             margin="0 auto"
@@ -80,6 +83,7 @@ const AdminProducts = () => {
                 <AdminProduct adminproduct={adminproduct} key={adminproduct.id} />
               ))}
               {value === "USER" && <Userinfo/> }
+              {value === "ADD" && <AdminAdd/> }
           </Box>
         </Box>
       );

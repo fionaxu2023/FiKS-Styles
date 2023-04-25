@@ -9,6 +9,7 @@ import styled from "@emotion/styled";
 import { shades } from "../../theme";
 import { setIsMenuOpen }  from "../../store/menuslice"
 import { useNavigate } from "react-router-dom";
+import {logout} from "../../store/authSlice"
 
 const FlexBox = styled(Box)`
   display: flex;
@@ -22,7 +23,15 @@ const Menu =()=>{
  const dispatch = useDispatch();
   const isMenuOpen = useSelector((state) =>state.menu.isMenuOpen);
 
+  const logoutAndRedirectHome = () => {
+    dispatch(logout());
+    navigate('/');
+  };
 
+  const handlesingup =()=>{
+    dispatch(logout());
+    navigate('/signup');
+  }
 
 return (
     <Box 
@@ -53,19 +62,27 @@ return (
             </IconButton>
           </FlexBox>
            {isLoggedIn ? (
-          <FlexBox  p="15px 0" onClick={() => {navigate("/login")}}>
+          <FlexBox  p="15px 0" onClick={logoutAndRedirectHome}>
           <IconButton>
             <PeopleOutlinedIcon size={30}/>
             <Typography variant="h4">Logout</Typography>
             </IconButton>
           </FlexBox>) : (
-            <FlexBox  p="15px 0" >
+            <FlexBox  p="15px 0" onClick={() => {navigate("/login")}}>
             <IconButton>
               <PeopleOutlinedIcon size={30}/>
-              <Typography variant="h4">SignUp/Login</Typography>
+              <Typography variant="h4">Login</Typography>
               </IconButton>
             </FlexBox>
+            
           )}
+
+           <FlexBox  p="15px 0" onClick={handlesingup}>
+            <IconButton>
+              <PeopleOutlinedIcon size={30}/>
+              <Typography variant="h4">SignUp</Typography>
+              </IconButton>
+            </FlexBox>
 
           <FlexBox  p="15px 0" onClick={() => {navigate("/sizechart")}} >
           <IconButton>

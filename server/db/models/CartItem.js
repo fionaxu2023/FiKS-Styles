@@ -8,9 +8,8 @@ const CartItems = db.define("cartItems", {
   quantity: {
     type: Sequelize.INTEGER,
   },
-  ProductId: {
+  productId: {
     type: Sequelize.INTEGER,
-    allowNull: false,
     references: {
       model: Product,
       key: "id",

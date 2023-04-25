@@ -4,21 +4,21 @@ const { db, User, Product, Cart, CartItems,Order } = require('../server/db/index
 const {green, red} = require('chalk');
 
 const users = [{ 
-  username: 'harrypotter@hogwarts.com',
+  username: 'user1@email.com',
   address: 'Somewhere in London',
   password: '123', 
   firstName: 'Harry',
   lastName: 'Potter',
   isAdmin:false,
  }, {
-  username: 'bigpharma@moderna.com',
+  username: 'user2@email.com',
   address: 'Somewhere in Edgewater NJ',
   password: '123', 
   firstName: 'Kelvin',
   lastName: 'Reynolds',
   isAdmin:false,
  }, {
-  username: 'bsamuel.brown48@email.com',
+  username: 'admin1@email.com',
   address: 'Somewhere in Edgewater NJ',
   password: '123', 
   firstName: 'John',
@@ -728,7 +728,21 @@ const products = [{
   category: 'Dress',
 }];
 
+const carts =[
+  {userId:1},
+  {userId:2},
+];
 
+const cartsitems =[
+  {ProductId:5,
+    productId:5,
+    quantity:1,
+    cartId:1},
+  {ProductId:3,
+    productId:3,
+    quantity:1,
+    cartId:2},
+]
 
 
 
@@ -747,17 +761,17 @@ const seed = async () => {
             return Product.create(product);
           })
         );
-        // await Promise.all(
-        //   Carts.map(cart => {
-        //     return Cart.create(cart);
-        //   })
-        // );
+        await Promise.all(
+          carts.map(cart => {
+            return Cart.create(cart);
+          })
+        );
 
-        // await Promise.all(
-        //   Orders.map(order => {
-        //     return Order.create(order);
-        //   })
-        // );
+        await Promise.all(
+          cartsitems.map(order => {
+            return CartItems.create(order);
+          })
+        );
 
         console.log(green('Seeding success!'));
 

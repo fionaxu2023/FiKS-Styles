@@ -1,19 +1,31 @@
 import React , { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IconButton, Box, Typography, useTheme, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../../theme";
-import { addToCart } from "../../store/cartSlice";
+import { addToCart,addItemToCart,fetchCartItems } from "../../store/cartSlice";
 import { useNavigate} from "react-router-dom";
+import{addToLocalStorageCart} from "../../store/localCart"
 
 const Product=(props)=>{
     const { product } = props
     const dispatch=useDispatch()
     const navigate=useNavigate()
-    const [count, setCount] = useState(1);
+    const [quantity, setQuantity] = useState(1);
     const [isHovered, setIsHovered] = useState(false);
+    const userId= useSelector(state=>state.auth.me.id)
+    const isLoggedIn = useSelector((state) => !!state.auth.me.id);
 
+    const handleAddToCart = async (product,quantity) => {
+      if (userId) {
+         dispatch(addItemToCart({ userId, productId: product.id, quantity }));
+      } else {
+        console.log(product);
+        addToLocalStorageCart(product,quantity);
+      }
+    };
+  
   const {
     palette: { neutral },
   } = useTheme();
@@ -48,18 +60,17 @@ const Product=(props)=>{
               backgroundColor={shades.neutral[100]}
               borderRadius="3px"
             >
-              <IconButton onClick={() => setCount(Math.max(count - 1, 1))}>
+              <IconButton onClick={() => setQuantity(Math.max(quantity - 1, 1))}>
                 <RemoveIcon />
               </IconButton>
-              <Typography color={shades.primary[300]}>{count}</Typography>
-              <IconButton onClick={() => setCount(count + 1)}>
+              <Typography color={shades.primary[300]}>{quantity}</Typography>
+              <IconButton onClick={() => setQuantity(quantity + 1)}>
                 <AddIcon />
               </IconButton>
             </Box>
+
             <Button
-              onClick={() => {
-                dispatch(addToCart({ item: { ...product, count } }));
-              }}
+              onClick={() => handleAddToCart( product, quantity)}
               sx={{ backgroundColor: shades.primary[300], color: "white" }}
             >
               Add to Cart

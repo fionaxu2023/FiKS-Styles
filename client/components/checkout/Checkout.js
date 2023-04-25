@@ -18,7 +18,7 @@ const Checkout = () => {
   const cart = useSelector((state) => state.cart.cart);
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
-
+  const userId= useSelector(state=>state.auth.me.id)
   const handleFormSubmit = async (values, actions) => {
     setActiveStep(activeStep + 1);
 
@@ -42,9 +42,10 @@ const Checkout = () => {
     const requestBody = {
       userName: [values.firstName, values.lastName].join(" "),
       email: values.email,
-      products: cart.map(({ id, count }) => ({
-        id,
-        count,
+      userId:userId,
+      products: cart.map(({ productId, quantity }) => ({
+        productId,
+        quantity,
       })),
     };
 
