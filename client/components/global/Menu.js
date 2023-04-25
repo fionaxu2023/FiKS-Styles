@@ -25,7 +25,6 @@ const Menu =()=>{
   const logoutAndRedirectHome = () => {
     dispatch(logout());
     dispatch(setIsMenuOpen())
-    windows.alert("You have Logged out")
     navigate('/');
   };
 

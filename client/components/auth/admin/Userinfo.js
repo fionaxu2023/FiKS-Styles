@@ -1,9 +1,7 @@
 import React, { useEffect ,useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IconButton, Box, Typography, useTheme, Button,TextField } from "@mui/material";
-import { useNavigate} from "react-router-dom";
-import { shades } from "../../../theme";
-import { getAllUser,addUser } from "../../../store/userSlice"
+import {  Box, Typography,  } from "@mui/material";
+import { getAllUser } from "../../../store/userSlice"
 import SingleUser from "./SingleUser"
 const Userinfo=()=>{
     const allaccounts = useSelector((state)=> state.users.allUsers);
