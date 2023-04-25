@@ -18,16 +18,15 @@ const Userinfo=()=>{
       );
       
       return (
-        <Box width="80%" margin="80px auto">
+        <Box width="100%" textAlign="center">
           <Typography variant="h4" textAlign="center">All USERS</Typography>
           
           <Box
-            margin="0 auto"
-            display="grid"
-            gridTemplateColumns="repeat(auto-fill, 300px)"
-            justifyContent="center"
-            rowGap="20px"
-            columnGap="1.33%"
+             display="grid"
+             gridTemplateColumns="repeat(auto-fill, 300px)"
+             justifyContent="center"
+             rowGap="20px"
+             columnGap="1.33%"
           >
              {users.map((user) => (
            <div key={user.id}>

@@ -39,41 +39,69 @@ const EditProfile =()=>{
   
    return (
    <div>
-    <Box width="80%" margin="80px auto">
-    <Typography variant="h3" textAlign="center">
-            Update your Profile
-          </Typography>
-        <Box  component="form" 
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off" onSubmit={submithandel}>
-        <TextField  label="FirstName" variant="standard" value = {firstName} onChange={(event) => setfirstName(event.target.value)}/>
-        <TextField  label="LastName" variant="standard" value = {lastName} onChange={(event) => setlastName(event.target.value)}/>
-        <TextField  label="UserName" variant="standard" value = {username} onChange={(event) => setusername(event.target.value)}/>
-        <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel>Password</InputLabel>
-          <OutlinedInput
-            type={showPassword ? 'text' : 'password'}
-            value = {password} onChange={(event) => setpassword(event.target.value)}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end" >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-          />
-        </FormControl>
-        <Button onClick= {submithandel} sx={{ backgroundColor: shades.primary[300], color: "white" }}>Submit Change</Button>
-        </Box>
-        </Box>
+    <Box width="80%" margin="80px auto" display="flex" flexDirection="column" alignItems="center">
+  <Typography variant="h3" textAlign="center">
+    Update your Profile
+  </Typography>
+  <Box
+    component="form"
+    display="flex"
+    flexDirection="column"
+    alignItems="center"
+    onSubmit={submithandel}
+    sx={{
+      '& > :not(style)': { m: 1, width: '100%' },
+    }}
+    noValidate
+    autoComplete="off"
+  >
+    <TextField
+      label="FirstName"
+      variant="standard"
+      value={firstName}
+      onChange={(event) => setfirstName(event.target.value)}
+    />
+    <TextField
+      label="LastName"
+      variant="standard"
+      value={lastName}
+      onChange={(event) => setlastName(event.target.value)}
+    />
+    <TextField
+      label="UserName"
+      variant="standard"
+      value={username}
+      onChange={(event) => setusername(event.target.value)}
+    />
+    <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+      <InputLabel>Password</InputLabel>
+      <OutlinedInput
+        type={showPassword ? 'text' : 'password'}
+        value={password}
+        onChange={(event) => setpassword(event.target.value)}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+              edge="end"
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        }
+        label="Password"
+      />
+    </FormControl>
+    <Button
+      onClick={submithandel}
+      sx={{ backgroundColor: shades.primary[300], color: 'white', width: '100%' }}
+    >
+      Submit Change
+    </Button>
+  </Box>
+</Box>
     </div>)
    
    

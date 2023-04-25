@@ -5,6 +5,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import CheckroomOutlinedIcon from '@mui/icons-material/CheckroomOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import ContactlessOutlinedIcon from '@mui/icons-material/ContactlessOutlined';
+import StraightenIcon from '@mui/icons-material/Straighten';
+import TwitterIcon from '@mui/icons-material/Twitter';
 import styled from "@emotion/styled";
 import { shades } from "../../theme";
 import { setIsMenuOpen }  from "../../store/menuslice"
@@ -25,6 +27,7 @@ const Menu =()=>{
 
   const logoutAndRedirectHome = () => {
     dispatch(logout());
+    windows.alert("You have Logged out")
     navigate('/');
   };
 
@@ -86,15 +89,14 @@ return (
 
           <FlexBox  p="15px 0" onClick={() => {navigate("/sizechart")}} >
           <IconButton>
-            <CheckroomOutlinedIcon size={30}/>
+            <StraightenIcon size={30}/>
             <Typography variant="h4">SizeChart</Typography>
             </IconButton>
             </FlexBox>
 
-            <FlexBox  p="15px 0" onClick={() => {navigate("/contact")}}>
+            <FlexBox  p="15px 0" onClick={() => {navigate("/share")}}>
                 <IconButton>
-              <ContactlessOutlinedIcon size={30} />
-            <Typography variant="h4" >Contact Us</Typography>
+              <TwitterIcon size={30} />
             </IconButton>
             </FlexBox>
 

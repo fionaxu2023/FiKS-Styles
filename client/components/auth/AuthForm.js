@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { authenticate } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
@@ -30,27 +31,17 @@ const AuthForm = ({ name, displayName }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="username">
-            <small>Username</small>
-          </label>
-          <input name="username" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && <div> {error} </div>}
-      </form>
-    </div>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Box component="form" onSubmit={handleSubmit} name={name} sx={{ p: 2, border: '1px solid gray', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <Typography variant="h5" sx={{ textAlign: 'center' }}>{displayName}</Typography>
+        <TextField name="username" label="Username" variant="outlined" />
+        <TextField name="password" label="Password" type="password" variant="outlined" />
+        <Button type="submit" variant="contained" sx={{ backgroundColor: shades.primary[300], color: "white", }}>{displayName}</Button>
+        {error && <Typography variant="subtitle1" sx={{ color: 'red' }}>{error}</Typography>}
+      </Box>
+    </Box>
   );
 };
+
 
 export default AuthForm;
