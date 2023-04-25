@@ -3,6 +3,7 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { authenticate } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
+import { shades } from '../../theme';
 /**
   The AuthForm component can be used for Login or Sign Up.
   Props for Login: name="login", displayName="Login"
