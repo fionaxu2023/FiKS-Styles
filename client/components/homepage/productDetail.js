@@ -5,20 +5,29 @@ import { useEffect, useState } from "react";
 import { addToCart } from "../../store/cartSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from "../../store/productSlice";
-
+import {addItemToCart,fetchCartItems} from "../../store/cartSlice"
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
   const { productId } = useParams();
   const product= useSelector(state=> state.products.singleProduct)
-
-
-  const [count, setCount] = useState(1);
+  const userId= useSelector(state=>state.auth.me.id)
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(()=>{
    dispatch(getSingleProduct(productId))
  },[dispatch])
 
+ const handleAddToCart = async (productId, quantity) => {
+  if (userId) {
+     await dispatch(addItemToCart({ userId, productId, quantity }));
+     dispatch(fetchCartItems(userId))
+  // } else {
+  //   console.log(product);
+  //   addToLocalStorageCart(product,quantity);
+  // }
+};
+}
 
  
 
@@ -54,7 +63,7 @@ const ProductDetails = () => {
                 minWidth: "150px",
                 padding: "10px 40px",
               }}
-              onClick={() => dispatch(addToCart({ item: { ...product, count } }))}
+              onClick={() => handleAddToCart(productId, quantity)}
             >
               ADD TO CART
             </Button> 

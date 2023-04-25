@@ -23,8 +23,8 @@ router.get('/:userId', async (req, res) => {
     const orders = await Order.findAll({
       where: { userId: user.id }
     });
-
-    return res.status(200).json({ orders });
+    
+    return res.status(200).json(orders);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Server error' });
