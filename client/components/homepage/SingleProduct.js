@@ -16,7 +16,6 @@ const Product=(props)=>{
     const [isHovered, setIsHovered] = useState(false);
     const userId= useSelector(state=>state.auth.me.id)
     
-    const isLoggedIn = useSelector((state) => !!state.auth.me.id);
 
     const handleAddToCart = (product,quantity) => {
       if (userId) {
