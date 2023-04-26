@@ -7,13 +7,13 @@ import * as yup from "yup";
 import { shades } from "../../theme";
 import Payment from "./Payment";
 import Shipping from "./Shipping";
-import { loadStripe } from "@stripe/stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
 import {getLocalStorageCart} from "../../store/localCart"
 import {deleteAllFromCart} from "../../store/cartSlice"
 import {clearLocalStorageCart} from "../../store/localCart"
-const stripePromise = loadStripe(
-  "pk_test_51N05EOJ2WjlkSNi2LtzCEathCYQMmxYrujzwBTQi3SyTj7lMuoZFxuUhow6dRfMOv8OUdtDCXqNfMuDR7Z8NH56x00tTQ70NAh"
-);
+// const stripePromise = loadStripe(
+//   "pk_test_51N05EOJ2WjlkSNi2LtzCEathCYQMmxYrujzwBTQi3SyTj7lMuoZFxuUhow6dRfMOv8OUdtDCXqNfMuDR7Z8NH56x00tTQ70NAh"
+// );
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -42,7 +42,7 @@ const Checkout = () => {
   };
 
   async function makePayment(values) {
-    const stripe = await stripePromise;
+    // const stripe = await stripePromise;
     let requestBody; 
   
     if (userId) {
@@ -70,7 +70,6 @@ const Checkout = () => {
       clearLocalStorageCart()
     }
 
-console.log(unloggedcart)
 
     const response = await fetch("http://localhost:8080/api/order", {
       method: "POST",
@@ -78,14 +77,14 @@ console.log(unloggedcart)
       body: JSON.stringify(requestBody),
     });
 
-    const session = await response.json();
+    // const session = await response.json();
    
-    const sessionId = session.id.toString()
-    console.log(sessionId)
+    // const sessionId = session.id.toString()
+    // console.log(sessionId)
 
-    await stripe.redirectToCheckout({
-      sessionId,
-    });
+    // await stripe.redirectToCheckout({
+    //   sessionId,
+    // });
   }
   
 
