@@ -33,6 +33,7 @@ const AppRoutes = () => {
        <Route path="/sizechart" element={<SizeChart/>}/>
        <Route path="/share" element={<Share/>}/>
        <Route path="/admin/:productId" element={<AdminDetail/>}/>
+       <Route path="/guest" element={<Guest/>}/>
        <Route
           path="/login"
           element={<AuthForm name="login" displayName="Login" />}

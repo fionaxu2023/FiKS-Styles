@@ -6,9 +6,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import styled from "@emotion/styled";
 import { shades } from "../../theme";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import {decreaseCount,increaseCount,removeFromCart,setIsCartOpen } from "../../store/cartSlice";
+import {setIsCartOpen } from "../../store/cartSlice";
 import { useNavigate } from "react-router-dom";
-import {fetchCartItems, addItemToCart , updateCartItemQuantity, removeItemFromCart} from "../../store/cartSlice"
+import {fetchCartItems , updateCartItemQuantity, removeItemFromCart} from "../../store/cartSlice"
 import { v4 as uuidv4 } from "uuid"
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -263,31 +263,13 @@ const handleQuantityChangeIncrease =  (productId, newQuantity) =>{
                 m: "20px 0",
               }}
               onClick={() => {
-                navigate("/login");
-                dispatch(setIsCartOpen({}));
-              }}
-            >
-              Login & Checkout
-            </Button>)}
-
-            <Button
-              sx={{
-                backgroundColor: shades.primary[500],
-                color: "white",
-                borderRadius: 0,
-                minWidth: "100%",
-                padding: "20px 40px",
-                m: "20px 0",
-              }}
-              onClick={() => {
                 navigate("/checkout");
                 dispatch(setIsCartOpen({}));
               }}
             >
               Checkout as Guest
-            </Button>
-             
-            
+            </Button>)
+            }
           </Box>
         </Box>
       </Box>

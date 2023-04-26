@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk  } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchOrder = createAsyncThunk('products/getAll', async() => {
+export const fetchOrder = createAsyncThunk('orders/getAll', async() => {
     try {
         const { data } = await axios.get(`api/order`);
         return data;
@@ -11,8 +11,32 @@ export const fetchOrder = createAsyncThunk('products/getAll', async() => {
     }
 });
 
-const initialState = {
-    allOrders: [],
+export const fetchUserHistory =createAsyncThunk("orders/getbyuser",
+async (userId) => {
+    try {
+      const { data } = await axios.get(`/api/order/${userId}`);
+      return data;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);
+
+export const fetchUserName = createAsyncThunk(
+    "orders/getbyguest",
+    async ({ userName }) => {
+      try {
+        const { data } = await axios.get(`/api/order?userName=${userName}`)
+        return data 
+      } catch (error) {
+        return error.message;
+      }    
+    }
+  );
+ 
+  const initialState = {
+    loggedinorder: [],
+    guestorder: [],
   };
 
 export const orderSlice = createSlice({
@@ -21,11 +45,14 @@ export const orderSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchOrder.fulfilled, (state, action) => {
-                state.allOrders= action.payload;
+            .addCase(fetchUserHistory.fulfilled,(state, action)=>{
+              state.loggedinorder=action.payload
+            })
+            .addCase(fetchUserName.fulfilled,(state,action)=>{
+                state.guestorder = action.payload
             })
             
     },
 });
 
-
+export default orderSlice.reducer;

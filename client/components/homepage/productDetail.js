@@ -6,6 +6,7 @@ import { addToCart } from "../../store/cartSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from "../../store/productSlice";
 import {addItemToCart,fetchCartItems} from "../../store/cartSlice"
+import {addToLocalStorageCart} from "../../store/localCart"
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,6 @@ const ProductDetails = () => {
       addToLocalStorageCart(product,quantity);
     }
   };
-
  
 
   return (
@@ -60,7 +60,7 @@ const ProductDetails = () => {
                 minWidth: "150px",
                 padding: "10px 40px",
               }}
-              onClick={() => handleAddToCart(product , quantity)}
+              onClick={() => handleAddToCart( product, quantity)}
             >
               ADD TO CART
             </Button> 

@@ -11,7 +11,7 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-//history order
+//history order for loggedin User
 
 router.get('/:userId', async (req, res) => {
   try {
@@ -30,6 +30,20 @@ router.get('/:userId', async (req, res) => {
     return res.status(500).json({ message: 'Server error' });
   }
 });
+
+//for unloggedin user 
+
+router.get('/', async (req, res, next) => {
+  const { userName } = req.query;
+
+  try {
+    const orders = await Order.findAll({ where: { userName: userName } });
+    res.json(orders);
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 //{"orders":
 //[{"id":1,"products":

@@ -39,7 +39,13 @@ const EditProfile =()=>{
   
    return (
    <div>
-    <Box width="80%" margin="80px auto" display="flex" flexDirection="column" alignItems="center">
+    <Box
+  width="80%"
+  margin="80px auto"
+  display="flex"
+  flexDirection="column"
+  alignItems="center"
+>
   <Typography variant="h3" textAlign="center">
     Update your Profile
   </Typography>

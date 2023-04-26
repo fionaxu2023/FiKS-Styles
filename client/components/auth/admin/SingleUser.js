@@ -31,13 +31,6 @@ const SingleUser=(props)=>{
       <Box
         position="relative"
       >
-        {/* <Box
-          position="absolute"
-          bottom="10%"
-          left="0"
-          width="100%"
-          padding="0 5%"
-        > */}
           <Box display="flex" justifyContent="space-between">
             <Button
               onClick={()=>handeldelete(user.id)}
@@ -46,8 +39,6 @@ const SingleUser=(props)=>{
               Deactivate
             </Button>
           </Box>
-
-        {/* </Box> */}
       </Box>
 
       

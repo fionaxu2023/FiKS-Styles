@@ -8,9 +8,6 @@ const Order = db.define("order", {
   userName: {
     type: Sequelize.STRING,
   },
-  // sessionId:{
-  //   type:Sequelize.TEXT,
-  // }
 });
 
 module.exports = Order
