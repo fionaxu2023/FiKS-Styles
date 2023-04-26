@@ -15,7 +15,7 @@ import { shades } from '../../theme';
 const AuthForm = ({ name, displayName }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { error } = useSelector((state) => state.auth);
-  // const isLoggedIn = useSelector((state) => !!state.auth.me.id);
+  const userId = useSelector((state) => state.auth.me.id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,11 +25,11 @@ const AuthForm = ({ name, displayName }) => {
     const username = evt.target.username.value;
     const password = evt.target.password.value;
      dispatch(authenticate({ username, password, method: formName }));
-    // {
-    //   isLoggedIn
-    //     ? (window.alert(`${formName} Successfully!`), navigate("/"))
-    //     : (console.log("failed"))
-    // }
+    {
+      userId 
+        ? (window.alert(`${formName} Successfully!`), navigate("/"))
+        : (console.log("failed"))
+    }
   };
 
   const handleShowPassword = () => {

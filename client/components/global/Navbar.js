@@ -7,13 +7,17 @@ import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 import { setIsCartOpen } from "../../store/cartSlice";
 import { setIsMenuOpen }  from "../../store/menuslice"
+import {getLocalStorageCart} from "../../store/localCart"
 
 const Navbar =()=>{
   const isLoggedIn = useSelector((state) => !!state.auth.me.id);
   const Navigate= useNavigate()
   const dispatch = useDispatch()
-  const cart= useSelector(state=>state.cart)
-
+  const cart= useSelector(state=>state.cart.cart)
+  const userId=useSelector((state)=>state.auth.me.id)
+  const unloggedincart= getLocalStorageCart()
+console.log(cart.length)
+console.log(unloggedincart.length)
     return (
      <Box display="flex"
        alignItems="center"
@@ -51,12 +55,12 @@ const Navbar =()=>{
             <PersonOutline/>
           </IconButton>) : (
            <IconButton onClick={() => {
-            Navigate("/login")}}>
+            Navigate("/guest")}}>
               <PersonOutline/>
             </IconButton>
           )}
-
-          <Badge
+          
+          {isLoggedIn ? (<Badge
             badgeContent={cart.length}
             color="secondary"
             invisible={cart.length === 0}
@@ -69,7 +73,21 @@ const Navbar =()=>{
                 minWidth: "13px",
               },
             }}
-          ></Badge>
+          ></Badge>):(<Badge
+            badgeContent={unloggedincart.length}
+            color="secondary"
+            invisible={unloggedincart.length === 0}
+            sx={{
+              "& .MuiBadge-badge": {
+                right: 5,
+                top: 5,
+                padding: "0 4px",
+                height: "14px",
+                minWidth: "13px",
+              },
+            }}
+          ></Badge>)}
+          
 
           <IconButton 
           onClick={()=>dispatch(setIsCartOpen({}))}>

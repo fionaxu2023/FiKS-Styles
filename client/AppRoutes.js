@@ -10,7 +10,7 @@ import User from "./components/auth/User"
 import SizeChart from './components/size/SizeChart';
 import Share from "./components/Share"
 import AdminDetail from "./components/auth/admin/AdminDetail"
-
+import Guest from './components/auth/Guest';
 
 
 const AppRoutes = () => {
@@ -27,8 +27,8 @@ const AppRoutes = () => {
       <Routes>
        <Route path="/" element={<Main/>}></Route>
        <Route path="/product/:productId" element={<ProductDetail/>}></Route>
-       <Route path="checkout" element={<Checkout />} />
-       <Route path="checkout/success" element={<Confirmation/>} />
+       <Route path="/checkout" element={<Checkout />} />
+       <Route path="/checkout/success" element={<Confirmation/>} />
       <Route path="/user" element={<User/>} />
        <Route path="/sizechart" element={<SizeChart/>}/>
        <Route path="/share" element={<Share/>}/>
@@ -57,9 +57,9 @@ const AppRoutes = () => {
         />
          <Route path="/sizechart" element={<SizeChart/>}/>
        <Route path="/share" element={<Share/>}/>
-       <Route path="checkout" element={<Checkout />} />
-       <Route path="checkout/success" element={<Confirmation/>} />
-        
+       <Route path="/checkout" element={<Checkout />} />
+       <Route path="/checkout/success" element={<Confirmation/>} />
+      <Route path="/guest" element={<Guest/>} />
       </Routes>
     )}
   </div>

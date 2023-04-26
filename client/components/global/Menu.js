@@ -93,13 +93,14 @@ return (
             </FlexBox>
             
           )}
-
+           
+           {isLoggedIn ? (<div></div>):(
            <FlexBox  p="15px 0" onClick={handlesingup}>
             <IconButton>
               <PeopleOutlinedIcon size={30}/>
               <Typography variant="h4">SignUp</Typography>
               </IconButton>
-            </FlexBox>
+            </FlexBox>)}
 
           <FlexBox  p="15px 0" onClick={handlesizechart} >
           <IconButton>

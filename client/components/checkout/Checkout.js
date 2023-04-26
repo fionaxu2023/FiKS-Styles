@@ -17,7 +17,7 @@ const stripePromise = loadStripe(
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const dispatch=useDispatch
+  const dispatch=useDispatch()
   const cart = useSelector((state) => state.cart.cart);
   const unloggedcart=getLocalStorageCart()
   const isFirstStep = activeStep === 0;
