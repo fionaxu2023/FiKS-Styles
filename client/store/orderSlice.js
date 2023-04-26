@@ -34,9 +34,24 @@ export const fetchUserName = createAsyncThunk(
     }
   );
  
+  export const addOrder = createAsyncThunk(
+    'orders/add',
+    async (requestBody) => {
+      try {
+        const { data } = await axios.post("/api/products",{requestBody
+        });
+        return data;
+      } catch (error) {
+        return error.message;
+      }
+    }
+  );
+
+
   const initialState = {
     loggedinorder: [],
     guestorder: [],
+    neworder:[],
   };
 
 export const orderSlice = createSlice({
@@ -50,6 +65,9 @@ export const orderSlice = createSlice({
             })
             .addCase(fetchUserName.fulfilled,(state,action)=>{
                 state.guestorder = action.payload
+            })
+            .addCase(addOrder.fulfilled,(state,action)=>{
+              state.neworder=action.payload
             })
             
     },
