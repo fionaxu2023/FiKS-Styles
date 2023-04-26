@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Share =()=>{
+const POPShare =()=>{
   return (
     <div>
       Share
@@ -8,7 +8,7 @@ const Share =()=>{
   )
 }
 
-export default Share
+export default POPShare
 
 
 

@@ -42,9 +42,7 @@ export const removeItemFromCart = createAsyncThunk(
 
 const initialState = {
     isCartOpen: false,
-    cart: [],
-    items:[],
-    singleitem:{}
+    cart:[],
   };
 
   export const cartSlice = createSlice({
@@ -94,24 +92,23 @@ const initialState = {
     },
     extraReducers: (builder)=>{
       builder.addCase(fetchCartItems.fulfilled, (state, action) => {
-        state.cart= action.payload;
+        return action.payload;
       });
       builder.addCase(addItemToCart.fulfilled, (state, action) => {
-        state.cart.push(action.payload);
+        state.push(action.payload);
       });
       builder.addCase(updateCartItemQuantity.fulfilled, (state, action) => {
-        const index = state.cart.findIndex(
+        const index = state.findIndex(
           (item) => item.product.id === action.payload.productId
         );
         if (index !== -1) {
-          state.cart[index].quantity = action.payload.quantity;
+          state[index].quantity = action.payload.quantity;
         }
       });
         // state.singleitem = action.payload;
 
       builder.addCase(removeItemFromCart.fulfilled, (state, action) => {
-        // return state.cart.filter((item) => item.productId !== action.payload);
-        state.singleitem = action.payload;
+        return state.filter((item) => item.productId !== action.payload);
       });
     },
   });

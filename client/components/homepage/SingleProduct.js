@@ -18,16 +18,15 @@ const Product=(props)=>{
     
     const isLoggedIn = useSelector((state) => !!state.auth.me.id);
 
-    const handleAddToCart = async (product,quantity) => {
+    const handleAddToCart =  (product,quantity) => {
       if (userId) {
-         await dispatch(addItemToCart({ userId, productId: product.id, quantity }));
-         dispatch(fetchCartItems(userId))
-      // } else {
-      //   console.log(product);
-      //   addToLocalStorageCart(product,quantity);
-      // }
-    };
-  }
+          dispatch(addItemToCart({ userId, productId: product.id, quantity }))}
+        //  dispatch(fetchCartItems(userId))
+        else {
+          addToLocalStorageCart(product,quantity);
+        }
+      };
+  
   
   const {
     palette: { neutral },

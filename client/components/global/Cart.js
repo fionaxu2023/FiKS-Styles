@@ -25,8 +25,7 @@ const Cart =()=>{
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart.cart)
-  console.log(cart)
+  const cart = useSelector((state) => state.cart)
   const isLoggedIn = useSelector((state) => !!state.auth.me.id);
   const [cartItems, setCartItems] = useState([]);
   const [newQuantity, setnewQuantity] = useState("");
@@ -35,50 +34,90 @@ const Cart =()=>{
   const userId = useSelector((state) => state.auth.me.id);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
-  const totalQuantity = cart.length > 0 ? cart.reduce((total, item) => {
+  const totalQuantity = cartItems && cartItems.length > 0 ? cartItems.reduce((total, item) => {
     return total + item.quantity;
-  }, 0) : 0;
-  
-  const totalPrice = cart.length > 0 ? cart.reduce((acc, item) => {
-    return acc + (item.product && item.product.price ? item.quantity * item.product.price : 0);
-  }, 0) : 0;
+}, 0) : 0;
+
+const totalPrice = cartItems && cartItems.length ? cartItems.reduce((acc, item) => {
+  const price = userId && item.product ? item.product.price : item.price;
+  return acc + (price ? item.quantity * price : 0);
+}, 0) : 0;
+
   
 console.log(totalPrice)
+console.log(cartItems)
 
-  useEffect(() => {
+useEffect(() => {
+  const updateCartItems = async () => {
     if (userId) {
-      dispatch(fetchCartItems(userId));
-    }
-  }, [dispatch,userId ]);
-  
-  const handleDeleteItem = async(productId) => {
-    if (userId) {
-      await dispatch(removeItemFromCart({ userId, productId }));
-      dispatch(fetchCartItems(userId));
+      await dispatch(fetchCartItems(userId));
+      if (JSON.stringify(cart) !== JSON.stringify(cartItems)) {
+        setCartItems((prevCartItems) => {
+          if (
+            JSON.stringify(cart) !== JSON.stringify(prevCartItems)
+          ) {
+            return cart;
+          }
+          return prevCartItems;
+        });
+      }
     } else {
-      dispatch(removeFromCart({ productId }))
+      const localStorageCart = getLocalStorageCart();
+      setCartItems((prevCartItems) => {
+        if (
+          JSON.stringify(localStorageCart) !== JSON.stringify(prevCartItems)
+        ) {
+          return localStorageCart;
+        }
+        return prevCartItems;
+      });
     }
   };
+  updateCartItems();
+}, [dispatch, userId, cart]);
 
 
-  const handleQuantityChangeDecrease = async(productId, newQuantity) => {
-    if (userId) {
-        await dispatch(updateCartItemQuantity({ userId, productId, quantity: newQuantity }))
-        dispatch(fetchCartItems(userId));
-    } 
-    else if (newQuantity<1){
-      await dispatch(removeItemFromCart({ userId, productId }))
-        dispatch(fetchCartItems(userId));
+
+const handleDeleteItem =(productId) => {
+  if (userId) {
+     dispatch(removeItemFromCart({ userId, productId }));
+   
+  } else{
+      removeLocalStorageCartItem(productId);
+      setCartItems(getLocalStorageCart());
     }
-  };
+};
 
-  const handleQuantityChangeIncrease = async(productId, newQuantity) => {
-    console.log(newQuantity)
-    if (userId) {
-        await dispatch(updateCartItemQuantity({ userId, productId, quantity: newQuantity }))
-        dispatch(fetchCartItems(userId));
-    } 
-  };
+
+const handleQuantityChangeDecrease = (productId, newQuantity) => {
+  if (userId) {
+       dispatch(updateCartItemQuantity({ userId, productId, quantity: newQuantity }))
+       setCartItems((prevCartItems) =>
+       prevCartItems.map((item) =>
+         item.id === productId ? { ...item, quantity: newQuantity } : item
+       )
+     );
+  } 
+  else {
+    updateLocalStorageCartItemQuantity(productId, newQuantity);
+    setCartItems(getLocalStorageCart());
+  }
+};
+
+const handleQuantityChangeIncrease = (productId, newQuantity) =>{
+  if (userId) {
+       dispatch(updateCartItemQuantity({ userId, productId, quantity: newQuantity }))
+       setCartItems((prevCartItems) =>
+       prevCartItems.map((item) =>
+         item.id === productId ? { ...item, quantity: newQuantity } : item
+       )
+     );
+  } 
+  else {
+    updateLocalStorageCartItemQuantity(productId, newQuantity);
+    setCartItems(getLocalStorageCart());
+  }
+};
  
   
 
@@ -113,11 +152,11 @@ console.log(totalPrice)
 
 
           <Box>
-       {cart.length === 0 ? (
+       {!cartItems || cartItems.length === 0 ? (
        <Typography fontWeight="bold">Your cart is empty</Typography>
       ) : (
     <Box>
-      {cart.map((item) => {
+      {cartItems && cartItems.map((item) => {
         const product =
           userId && item.product ? item.product : item;
         return (

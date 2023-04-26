@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
@@ -9,6 +9,7 @@ import styled from "@emotion/styled";
 import { setIsMenuOpen }  from "../../store/menuslice"
 import { useNavigate } from "react-router-dom";
 import {logout} from "../../store/authSlice"
+import  POPShare from "../Share"
 
 const FlexBox = styled(Box)`
   display: flex;
@@ -21,6 +22,7 @@ const Menu =()=>{
  const navigate = useNavigate();
  const dispatch = useDispatch();
   const isMenuOpen = useSelector((state) =>state.menu.isMenuOpen);
+ const [share,setShare]=useState(false)
 
   const logoutAndRedirectHome = () => {
     dispatch(logout());
@@ -45,8 +47,8 @@ const Menu =()=>{
   }
  
   const handleshare=()=>{
+    dispatch(setShare(false))
     dispatch(setIsMenuOpen())
-    navigate("/share")
   }
 return (
     <Box 
@@ -106,7 +108,7 @@ return (
             </IconButton>
             </FlexBox>
 
-            <FlexBox  p="15px 0" onClick={handleshare}>
+            <FlexBox  p="15px 0" onClick={handleshare}> 
                 <IconButton>
               <TwitterIcon size={30} />
             </IconButton>

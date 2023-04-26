@@ -15,7 +15,7 @@ const stripePromise = loadStripe(
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const cart = useSelector((state) => state.cart.cart);
+  const cart = useSelector((state) => state.cart);
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
   const userId= useSelector(state=>state.auth.me.id)
@@ -43,6 +43,7 @@ const Checkout = () => {
       userName: [values.firstName, values.lastName].join(" "),
       email: values.email,
       userId:userId,
+      
       products: cart.map(({ productId, quantity }) => ({
         productId,
         quantity,
@@ -56,9 +57,12 @@ const Checkout = () => {
     });
 
     const session = await response.json();
+   
+    const sessionId = session.id.toString()
+    console.log(sessionId)
 
     await stripe.redirectToCheckout({
-      sessionId:session.id ,
+      sessionId,
     });
   }
   
