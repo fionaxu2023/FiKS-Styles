@@ -30,11 +30,9 @@ const Cart =()=>{
   const localStorageCart= getLocalStorageCart();
   const [cartItems, setCartItems] = useState([]);
   const [newQuantity, setnewQuantity] = useState("");
- 
+  const isCartOpen= useSelector((state) => state.cart.isCartOpen)
   
   const userId = useSelector((state) => state.auth.me.id);
-  const isCartOpen = useSelector((state) => state.cart.isCartOpen);
-
   const totalQuantity = cartItems && cartItems.length > 0 ? cartItems.reduce((total, item) => {
     return total + item.quantity;
 }, 0) : 0;
@@ -72,16 +70,16 @@ useEffect(() => {
       return prevCartItems;
     });
   }
-}, [dispatch, userId, cart,localStorageCart ]);
+}, [dispatch, userId, cart, localStorageCart ]);
 
 
 
 const handleDeleteItem = (productId) => {
   if (userId) {
-      dispatch(removeItemFromCart({ userId, productId }));
-      setCartItems((prevCartItems) =>
-       prevCartItems.filter((item) =>
-         item.id != productId ))
+       dispatch(removeItemFromCart({ userId, productId }));
+      // setCartItems((prevCartItems) =>
+      //  prevCartItems.filter((item) =>
+      //    item.id != productId ))
    }
    
    else{
@@ -148,7 +146,7 @@ const handleQuantityChangeIncrease =  (productId, newQuantity) =>{
         <Box padding="30px" overflow="auto" height="100%">
           <FlexBox mb="15px">
             <Typography variant="h3">SHOPPING BAG ({totalQuantity})</Typography>
-            <IconButton onClick={() => dispatch(setIsCartOpen({}))}>
+            <IconButton onClick={()=>dispatch(setIsCartOpen())}>
               <CloseIcon />
             </IconButton>
           </FlexBox>

@@ -1,5 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux"
+import { useState } from "react";
 import {Badge, Box, IconButton } from "@mui/material"
 import {PersonOutline,ShoppingBagOutlined,MenuOutlined,SearchOutlined,
 } from "@mui/icons-material";
@@ -11,13 +12,13 @@ import {getLocalStorageCart} from "../../store/localCart"
 
 const Navbar =()=>{
   const isLoggedIn = useSelector((state) => !!state.auth.me.id);
+  const [cartstate,SetCartstate]=useState(false)
   const Navigate= useNavigate()
   const dispatch = useDispatch()
-  const cart= useSelector(state=>state.cart.cart)
+  const cart= useSelector(state=>state.cart)
   const userId=useSelector((state)=>state.auth.me.id)
   const unloggedincart= getLocalStorageCart()
-console.log(cart.length)
-console.log(unloggedincart.length)
+
     return (
      <Box display="flex"
        alignItems="center"
@@ -60,7 +61,7 @@ console.log(unloggedincart.length)
             </IconButton>
           )}
           
-          {isLoggedIn ? (<Badge
+          <Badge
             badgeContent={cart.length}
             color="secondary"
             invisible={cart.length === 0}
@@ -73,7 +74,8 @@ console.log(unloggedincart.length)
                 minWidth: "13px",
               },
             }}
-          ></Badge>):(<Badge
+          ></Badge>
+          {/* ):(<Badge
             badgeContent={unloggedincart.length}
             color="secondary"
             invisible={unloggedincart.length === 0}
@@ -86,11 +88,11 @@ console.log(unloggedincart.length)
                 minWidth: "13px",
               },
             }}
-          ></Badge>)}
+          ></Badge>)} */}
           
 
           <IconButton 
-          onClick={()=>dispatch(setIsCartOpen({}))}>
+          onClick={()=>dispatch(setIsCartOpen())}>
             <ShoppingBagOutlined/>
           </IconButton>
 

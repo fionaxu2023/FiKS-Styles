@@ -71,6 +71,7 @@ const Guest = () => {
   columnGap="1.33%"
 >
         <>
+      
           {historyorder.map((order, index) => {
             return (
               <div key={order.id}>
@@ -90,13 +91,13 @@ const Guest = () => {
                   >
                     Order {index + 1}
                   </Typography>
-                  {order.products.map(({ productId, quantity }) => {
+                  {order.products.map(({ id , quantity }) => {
                     const matchingProduct = products.find(
-                      (product) => product.id === productId
+                      (product) => product.id === id
                     );
                     return (
                       <Box
-                        key={productId}
+                        key={id}
                         sx={{
                           display: "flex",
                           alignItems: "center",
@@ -116,7 +117,7 @@ const Guest = () => {
                             height="100%"
                             width="100%"
                             src={matchingProduct.imageURL}
-                            onClick={() => navigate(`/product/${productId}`)}
+                            onClick={() => navigate(`/product/${matchingProduct.id}`)}
                             style={{ cursor: "pointer" }}
                           />
                         </Box>
@@ -145,7 +146,7 @@ const Guest = () => {
             );
           })}
         </>
-      
+    
     </Box>
         </div>)
        

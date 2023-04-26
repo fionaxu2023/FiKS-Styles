@@ -49,48 +49,10 @@ const initialState = {
     isCartOpen: false,
     cart:[],
   };
-
   export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-      setItems: (state, action) => {
-        state.cart = action.payload;
-      },
-  
-      addToCart: (state, action) => {
-        state.cart = [...state.cart, action.payload.item];
-      },
-  
-      removeFromCart: (state, action) => {
-        state.cart = state.items.filter((item) => item.id !== action.payload.id);
-      },
-  
-      increaseCount: (state, action) => {
-        state.cart = state.cart.map((item) => {
-          if (item.id === action.payload.id) {
-            item.count++;
-          }
-          return item;
-        });
-      },
-  
-      decreaseCount: (state, action) => {
-        const { id } = action.payload;
-        const cartItem = state.cart.find((item) => item.id === id);
-
-        if (cartItem.count === 1) {
-          state.cart = state.cart.filter((item) => item.id !== id);
-        } else {
-          state.cart = state.cart.map((item) => {
-                if (item.id === id) {
-                    item.count--;
-                }
-                return item;
-            });
-        }
-    },
-  
       setIsCartOpen: (state) => {
         state.isCartOpen = !state.isCartOpen;
       },
@@ -113,7 +75,7 @@ const initialState = {
         // state.singleitem = action.payload;
 
       builder.addCase(removeItemFromCart.fulfilled, (state, action) => {
-        return state.cart.filter((item) => item.productId !== action.payload);
+        state.cart = state.cart.filter((item) => item.productId !== action.payload);
       });
 
       builder.addCase(deleteAllFromCart.fulfilled,(state,action)=>{
@@ -123,11 +85,6 @@ const initialState = {
   });
   
   export const {
-    setItems,
-    addToCart,
-    removeFromCart,
-    increaseCount,
-    decreaseCount,
     setIsCartOpen,
   } = cartSlice.actions;
   

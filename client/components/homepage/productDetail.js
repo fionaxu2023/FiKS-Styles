@@ -21,12 +21,14 @@ const ProductDetails = () => {
 
  const handleAddToCart = (product,quantity) => {
   if (userId) {
-     dispatch(addItemToCart({ userId, productId: product.id, quantity }))}
+    dispatch(addItemToCart({ userId, productId: product.id, quantity }))
+    }
+
     else {
       addToLocalStorageCart(product,quantity);
     }
   };
- 
+
 
   return (
     <Box width="80%" m="80px auto">
