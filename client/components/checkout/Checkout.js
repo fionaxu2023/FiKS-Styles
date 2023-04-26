@@ -10,7 +10,7 @@ import Shipping from "./Shipping";
 import { loadStripe } from "@stripe/stripe-js";
 import {getLocalStorageCart} from "../../store/localCart"
 import {deleteAllFromCart} from "../../store/cartSlice"
-import clearLocalStorageCart from "../../store/localCart"
+import {clearLocalStorageCart} from "../../store/localCart"
 const stripePromise = loadStripe(
   "pk_test_51N05EOJ2WjlkSNi2LtzCEathCYQMmxYrujzwBTQi3SyTj7lMuoZFxuUhow6dRfMOv8OUdtDCXqNfMuDR7Z8NH56x00tTQ70NAh"
 );
