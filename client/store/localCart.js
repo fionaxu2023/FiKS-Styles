@@ -7,18 +7,23 @@ export const setLocalStorageCart = (cart) => {
   localStorage.setItem("cart", JSON.stringify(cart));
 };
 
-export const addToLocalStorageCart = (product, quantity) => {
+export const addToLocalStorageCart = (product,quantity) => {
   const cart = getLocalStorageCart();
-  const productInCart = cart.find((cartItem) => cartItem.id === product.id);
+  const productInCart = cart.find((cartItem) => cartItem.id ===product.id);
 
   if (productInCart) {
     productInCart.quantity += quantity;
   } else {
-    const item = { ...product, quantity: quantity };
+    const item = { ...product , quantity: quantity };
     cart.push(item);
   }
   setLocalStorageCart(cart);
 };
+
+export const  clearLocalStorageCart=()=> {
+  localStorage.clear();
+  return [];
+}
 
 export const updateLocalStorageCartItemQuantity = (productId, quantity) => {
   const cart = getLocalStorageCart();

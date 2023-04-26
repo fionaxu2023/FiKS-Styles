@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Button, Stepper, Step, StepLabel } from "@mui/material";
 import { Formik } from "formik";
 import { useState } from "react";
@@ -8,14 +8,18 @@ import { shades } from "../../theme";
 import Payment from "./Payment";
 import Shipping from "./Shipping";
 import { loadStripe } from "@stripe/stripe-js";
-
+import {getLocalStorageCart} from "../../store/localCart"
+import {deleteAllFromCart} from "../../store/cartSlice"
+import clearLocalStorageCart from "../../store/localCart"
 const stripePromise = loadStripe(
   "pk_test_51N05EOJ2WjlkSNi2LtzCEathCYQMmxYrujzwBTQi3SyTj7lMuoZFxuUhow6dRfMOv8OUdtDCXqNfMuDR7Z8NH56x00tTQ70NAh"
 );
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const cart = useSelector((state) => state.cart);
+  const dispatch=useDispatch
+  const cart = useSelector((state) => state.cart.cart);
+  const unloggedcart=getLocalStorageCart()
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
   const userId= useSelector(state=>state.auth.me.id)
@@ -39,16 +43,34 @@ const Checkout = () => {
 
   async function makePayment(values) {
     const stripe = await stripePromise;
-    const requestBody = {
-      userName: [values.firstName, values.lastName].join(" "),
-      email: values.email,
-      userId:userId,
-      
-      products: cart.map(({ productId, quantity }) => ({
-        productId,
-        quantity,
-      })),
-    };
+    let requestBody; 
+  
+    if (userId) {
+      requestBody = {
+        // userName: [values.firstName, values.lastName].join(" "),
+        userName: values.email,
+        userId: userId,
+        products: cart.map(({ productId, quantity }) => ({
+          productId,
+          quantity,
+        })),
+      };
+      dispatch(deleteAllFromCart(userId))
+    
+    } else {
+      requestBody = {
+        // userName: [values.firstName, values.lastName].join(" "),
+        userName: values.email,
+        products: unloggedcart.map(({ id, quantity }) => ({
+          id,
+          quantity,
+        })),
+      };
+
+      clearLocalStorageCart()
+    }
+
+console.log(unloggedcart)
 
     const response = await fetch("http://localhost:8080/api/order", {
       method: "POST",

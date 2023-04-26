@@ -25,8 +25,9 @@ const Cart =()=>{
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart)
+  const cart = useSelector((state) => state.cart.cart)
   const isLoggedIn = useSelector((state) => !!state.auth.me.id);
+  const localStorageCart= getLocalStorageCart();
   const [cartItems, setCartItems] = useState([]);
   const [newQuantity, setnewQuantity] = useState("");
  
@@ -48,44 +49,46 @@ console.log(totalPrice)
 console.log(cartItems)
 
 useEffect(() => {
-  const updateCartItems = async () => {
-    if (userId) {
-      await dispatch(fetchCartItems(userId));
-      if (JSON.stringify(cart) !== JSON.stringify(cartItems)) {
-        setCartItems((prevCartItems) => {
-          if (
-            JSON.stringify(cart) !== JSON.stringify(prevCartItems)
-          ) {
-            return cart;
-          }
-          return prevCartItems;
-        });
-      }
-    } else {
-      const localStorageCart = getLocalStorageCart();
+  if (userId) {
+    if (JSON.stringify(cart) !== JSON.stringify(cartItems)) {
+      dispatch(fetchCartItems(userId));
       setCartItems((prevCartItems) => {
         if (
-          JSON.stringify(localStorageCart) !== JSON.stringify(prevCartItems)
+          JSON.stringify(cart) !== JSON.stringify(prevCartItems)
         ) {
-          return localStorageCart;
+          return cart;
         }
         return prevCartItems;
       });
     }
-  };
-  updateCartItems();
-}, [dispatch, userId, cart]);
+  } else {
+    const localStorageCart = getLocalStorageCart();
+    setCartItems((prevCartItems) => {
+      if (
+        JSON.stringify(localStorageCart) !== JSON.stringify(prevCartItems)
+      ) {
+        return localStorageCart;
+      }
+      return prevCartItems;
+    });
+  }
+}, [dispatch, userId, cart,localStorageCart ]);
 
 
 
-const handleDeleteItem =(productId) => {
+const handleDeleteItem = (productId) => {
   if (userId) {
-     dispatch(removeItemFromCart({ userId, productId }));
+      dispatch(removeItemFromCart({ userId, productId }));
+      setCartItems((prevCartItems) =>
+       prevCartItems.filter((item) =>
+         item.id != productId ))
+   }
    
-  } else{
+   else{
       removeLocalStorageCartItem(productId);
       setCartItems(getLocalStorageCart());
     }
+    console.log(cartItems)
 };
 
 
@@ -104,9 +107,9 @@ const handleQuantityChangeDecrease = (productId, newQuantity) => {
   }
 };
 
-const handleQuantityChangeIncrease = (productId, newQuantity) =>{
+const handleQuantityChangeIncrease =  (productId, newQuantity) =>{
   if (userId) {
-       dispatch(updateCartItemQuantity({ userId, productId, quantity: newQuantity }))
+        dispatch(updateCartItemQuantity({ userId, productId, quantity: newQuantity }))
        setCartItems((prevCartItems) =>
        prevCartItems.map((item) =>
          item.id === productId ? { ...item, quantity: newQuantity } : item
@@ -266,6 +269,23 @@ const handleQuantityChangeIncrease = (productId, newQuantity) =>{
             >
               Login & Checkout
             </Button>)}
+
+            <Button
+              sx={{
+                backgroundColor: shades.primary[500],
+                color: "white",
+                borderRadius: 0,
+                minWidth: "100%",
+                padding: "20px 40px",
+                m: "20px 0",
+              }}
+              onClick={() => {
+                navigate("/checkout");
+                dispatch(setIsCartOpen({}));
+              }}
+            >
+              Checkout as Guest
+            </Button>
              
             
           </Box>

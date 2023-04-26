@@ -38,6 +38,11 @@ export const removeItemFromCart = createAsyncThunk(
   }
 );
 
+export const deleteAllFromCart=createAsyncThunk("cart/deleteall",
+async(userId)=>{
+  await axios.delete(`api/cart/${userId}`)
+}
+)
 
 
 const initialState = {
@@ -92,24 +97,28 @@ const initialState = {
     },
     extraReducers: (builder)=>{
       builder.addCase(fetchCartItems.fulfilled, (state, action) => {
-        return action.payload;
+        state.cart = action.payload;
       });
       builder.addCase(addItemToCart.fulfilled, (state, action) => {
-        state.push(action.payload);
+        state.cart.push(action.payload);
       });
       builder.addCase(updateCartItemQuantity.fulfilled, (state, action) => {
-        const index = state.findIndex(
+        const index = state.cart.findIndex(
           (item) => item.product.id === action.payload.productId
         );
         if (index !== -1) {
-          state[index].quantity = action.payload.quantity;
+          state.cart[index].quantity = action.payload.quantity;
         }
       });
         // state.singleitem = action.payload;
 
       builder.addCase(removeItemFromCart.fulfilled, (state, action) => {
-        return state.filter((item) => item.productId !== action.payload);
+        return state.cart.filter((item) => item.productId !== action.payload);
       });
+
+      builder.addCase(deleteAllFromCart.fulfilled,(state,action)=>{
+         state.cart=[]
+      })
     },
   });
   

@@ -18,16 +18,13 @@ const ProductDetails = () => {
    dispatch(getSingleProduct(productId))
  },[dispatch])
 
- const handleAddToCart = async (productId, quantity) => {
+ const handleAddToCart = (product,quantity) => {
   if (userId) {
-     await dispatch(addItemToCart({ userId, productId, quantity }));
-     dispatch(fetchCartItems(userId))
-  // } else {
-  //   console.log(product);
-  //   addToLocalStorageCart(product,quantity);
-  // }
-};
-}
+     dispatch(addItemToCart({ userId, productId: product.id, quantity }))}
+    else {
+      addToLocalStorageCart(product,quantity);
+    }
+  };
 
  
 
@@ -63,7 +60,7 @@ const ProductDetails = () => {
                 minWidth: "150px",
                 padding: "10px 40px",
               }}
-              onClick={() => handleAddToCart(productId, quantity)}
+              onClick={() => handleAddToCart(product , quantity)}
             >
               ADD TO CART
             </Button> 

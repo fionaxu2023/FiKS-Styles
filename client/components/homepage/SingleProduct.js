@@ -6,7 +6,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../../theme";
 import { addToCart,addItemToCart,fetchCartItems } from "../../store/cartSlice";
 import { useNavigate} from "react-router-dom";
-import{addToLocalStorageCart} from "../../store/localCart"
+import{addToLocalStorageCart, getLocalStorageCart } from "../../store/localCart"
 
 const Product=(props)=>{
     const { product } = props
@@ -18,12 +18,12 @@ const Product=(props)=>{
     
     const isLoggedIn = useSelector((state) => !!state.auth.me.id);
 
-    const handleAddToCart =  (product,quantity) => {
+    const handleAddToCart = (product,quantity) => {
       if (userId) {
-          dispatch(addItemToCart({ userId, productId: product.id, quantity }))}
-        //  dispatch(fetchCartItems(userId))
+         dispatch(addItemToCart({ userId, productId: product.id, quantity }))}
         else {
           addToLocalStorageCart(product,quantity);
+          
         }
       };
   

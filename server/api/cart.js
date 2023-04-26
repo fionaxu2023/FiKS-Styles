@@ -19,7 +19,7 @@ router.post("/:userId/add", async (req, res, next) => {
     const userId = req.params.userId;
     const productId = req.body.productId;
     const quantity=req.body.quantity
-    let userCart = await Cart.findOne({ where: { userId } });
+    let userCart = await Cart.findOne({ where: { userId } })
     if (!userCart) {
       userCart = await Cart.create({ userId });
     }
@@ -40,72 +40,6 @@ router.post("/:userId/add", async (req, res, next) => {
   }
 });
 
-
-// router.put("/:userId/update", async (req, res, next) => {
-//   try {
-//     const userId = req.params.userId;
-//     const productId = req.body.productId;
-//     const newQuantity = req.body.newQuantity;
-//     const userCart = await Cart.findOne({ where: { userId } });
-
-//     const cartItem = await CartItems.findOne({
-//       where: { porductId:productId, cartId: userCart.id },
-//     });
-
-//     if (cartItem) {
-//       cartItem.quantity = newQuantity;
-//       await cartItem.save();
-//       res.status(200).json(cartItem);
-//     } else {
-//       res.status(404).send("Cart item not found");
-//     }
-//   } catch (err) {
-//     next(err);
-//   }
-// });
-
-// router.put('/:userId/update', async (req, res) => {
-//   const { userId, productId } = req.params;
-//   const { quantity } = req.body;
-
-//   try {
-//     // Find the user's cart
-//     const cart = await Cart.findOne({
-//       where: {
-//         userId: userId,
-//         fulfilled: false
-//       },
-//       include: [
-//         {
-//           model: Product,
-//           where: {
-//             id: productId
-//           }
-//         }
-//       ]
-//     });
-
-//     if (!cart) {
-//       return res.status(404).send('Cart not found');
-//     }
-
-//     // Find the cart item for the specified product
-//     const cartItem = cart.products.find(item => item.id === parseInt(productId));
-
-//     if (!cartItem) {
-//       return res.status(404).send('Cart item not found');
-//     }
-
-//     // Update the quantity of the cart item
-//     cartItem.cartItems.quantity = quantity;
-//     await cartItem.cartItems.save();
-
-//     res.status(200).send('Cart item updated successfully');
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Internal server error');
-//   }
-// });
 
 
 router.put("/:userId/update", async (req, res, next) => {
@@ -149,6 +83,24 @@ router.delete("/:userId/remove", async (req, res, next) => {
     }
   } catch (err) {
     next(err);
+  }
+});
+
+router.delete('/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const cart = await Cart.findOne({
+      where: { userId },
+      include: [{ model: Product, through: CartItems }],
+    });
+    if (!cart) {
+      return res.status(404).json({ error: 'Cart not found' });
+    }
+    await cart.setProducts([]);
+    return res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 

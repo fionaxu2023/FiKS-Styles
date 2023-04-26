@@ -57,6 +57,8 @@ const AppRoutes = () => {
         />
          <Route path="/sizechart" element={<SizeChart/>}/>
        <Route path="/share" element={<Share/>}/>
+       <Route path="checkout" element={<Checkout />} />
+       <Route path="checkout/success" element={<Confirmation/>} />
         
       </Routes>
     )}
