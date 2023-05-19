@@ -62,7 +62,7 @@ const initialState = {
         state.cart = action.payload;
       });
       builder.addCase(addItemToCart.fulfilled, (state, action) => {
-        state.cart.push(action.payload);
+         state.cart.push(action.payload);
       });
       builder.addCase(updateCartItemQuantity.fulfilled, (state, action) => {
         const index = state.cart.findIndex(
